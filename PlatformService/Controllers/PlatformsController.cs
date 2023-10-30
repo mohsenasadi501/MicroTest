@@ -13,6 +13,15 @@ namespace MicroTest.Controllers
         private readonly IPlatformRepo _platformRepo;
         private readonly IMapper _mapper;
 
+        [HttpGet("enviroment", Name = "GetEnviroments")]
+        public ActionResult<string[]> GetEnviroments()
+        {
+            return
+                new string[2] {
+                    Environment.GetEnvironmentVariable("API_SortOrder"),
+                    Environment.GetEnvironmentVariable("API_PageSize")
+                };
+        }
         public PlatformsController(IPlatformRepo platformRepo, IMapper mapper)
         {
             _platformRepo = platformRepo;
@@ -29,12 +38,13 @@ namespace MicroTest.Controllers
             return Ok(_mapper.Map<IEnumerable<PlatformReadDto>>(platformItems));
         }
 
-        [HttpGet("{id}" , Name = "GetPlatformById")]
+        [HttpGet("{id}", Name = "GetPlatformById")]
         public ActionResult<PlatformReadDto> GetPlatformById(int id)
         {
             var platformItem = _platformRepo.GetPlatformById(id);
-            if(platformItem != null) {
-            
+            if (platformItem != null)
+            {
+
                 return Ok(_mapper.Map<PlatformReadDto>(platformItem));
             }
             return NotFound();

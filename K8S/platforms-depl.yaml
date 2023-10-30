@@ -23,7 +23,17 @@ spec:
           ports:
             - containerPort: 80
               protocol: TCP
-          
+          env:
+            - name: API_SortOrder
+              valueFrom:
+               configMapKeyRef:
+                key: "SortOrder"
+                name: "platform-config"
+            - name: API_PageSize
+              valueFrom:
+               configMapKeyRef:
+                key: "PageSize"
+                name: "platform-config"
 ---
 apiVersion: v1
 kind: Service

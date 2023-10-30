@@ -1,0 +1,8 @@
+# In this sample we pass setting as a enviroment and can not be reload, beacsuse the enviroment just set in start up 
+apiVersion: v1
+kind: ConfigMap
+metadata:
+ name: platform-config
+data:
+ SortOrder: "asc"
+ PageSize: "50"
