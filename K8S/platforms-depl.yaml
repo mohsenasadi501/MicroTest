@@ -1,0 +1,45 @@
+apiVersion: apps/v1 
+kind: Deployment # We should specify the object or component exp: deployment, service, secret, ...
+# The object that we specified, metadata, provides unique properties of that object. This may contain name, namespace, and label fields. So, through this, we get information about the object. Here is an example.
+metadata:
+  name: platform
+  labels:
+    app: platform-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: platform-app
+  template:
+    metadata:
+      labels:
+        app: platform-app
+        service: platform
+    spec:
+      containers:
+        - name: platformcontainer
+          image: mohsenasadi5011/platform:latest
+          # will use the local docker images if not present the will check docker hub
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+              protocol: TCP
+          #env:
+          #  - name: ASPNETCORE_URLS
+          #    value: http://+:80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: platformservice
+  labels:
+    app: product-app
+    service: platform
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 8081
+      targetPort : 80
+      protocol: TCP
+  selector:
+    app: platform-app
