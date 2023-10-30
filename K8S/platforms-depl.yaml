@@ -2,44 +2,41 @@ apiVersion: apps/v1
 kind: Deployment # We should specify the object or component exp: deployment, service, secret, ...
 # The object that we specified, metadata, provides unique properties of that object. This may contain name, namespace, and label fields. So, through this, we get information about the object. Here is an example.
 metadata:
-  name: platform
+  name: platform  # specifies the name of the deployment.
   labels:
     app: platform-app
 spec:
-  replicas: 1
+  replicas: 1 # Desired number of replicas (instances) of the API to be running.
   selector:
     matchLabels:
       app: platform-app
-  template:
+  template: # Defines the configuration for the pods created by the deployment.
     metadata:
-      labels:
+      labels: #  Field sets the label for the pods.
         app: platform-app
         service: platform
     spec:
-      containers:
-        - name: platformcontainer
-          image: mohsenasadi5011/platform:latest
-          # will use the local docker images if not present the will check docker hub
-          imagePullPolicy: IfNotPresent
+      containers: # Section specifies the container configuration.
+        - name: platformcontainer # Name of the container.
+          image: mohsenasadi5011/platform:latest # References the Docker image you built earlier
+          imagePullPolicy: IfNotPresent # will use the local docker images if not present the will check docker hub
           ports:
             - containerPort: 80
               protocol: TCP
-          #env:
-          #  - name: ASPNETCORE_URLS
-          #    value: http://+:80
+          
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: platformservice
+  name: platformservice # Name of the service.
   labels:
     app: product-app
     service: platform
 spec:
   type: LoadBalancer
   ports:
-    - port: 8081
-      targetPort : 80
+    - port: 8081 # is the abstracted Service port, which can be any port other pods use to access the Service, In this case it will be accessible from the host 
+      targetPort : 80 # Is the port the container accepts traffic on
       protocol: TCP
-  selector:
+  selector: # Field matches the label specified in the deployment YAML.
     app: platform-app
