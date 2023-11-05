@@ -2,12 +2,19 @@
 
 namespace CommandsService.Controllers
 {
-    public class PlatformsController : Controller
+    [Route("api/c/[controller]")]
+    [ApiController]
+    public class PlatformsController : ControllerBase
     {
-        public IActionResult Index()
+        public PlatformsController()
         {
-            return View();
         }
 
+        [HttpPost]
+        public ActionResult TestInboundConnection()
+        {
+            Console.WriteLine("--> Inbound POST # Command Service");
+            return Ok("Inbound is ok ...");
+        }
     }
 }
