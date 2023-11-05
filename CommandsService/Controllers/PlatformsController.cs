@@ -8,5 +8,6 @@ namespace CommandsService.Controllers
         {
             return View();
         }
+
     }
 }
