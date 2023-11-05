@@ -10,6 +10,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		docker-compose.yaml = docker-compose.yaml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandsService", "CommandsService\CommandsService.csproj", "{14D547D9-7C7E-42CC-9A1C-B0877015D998}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,6 +22,10 @@ Global
 		{0895E1B0-ACE5-4E32-97FA-63E452FAB5DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0895E1B0-ACE5-4E32-97FA-63E452FAB5DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0895E1B0-ACE5-4E32-97FA-63E452FAB5DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14D547D9-7C7E-42CC-9A1C-B0877015D998}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14D547D9-7C7E-42CC-9A1C-B0877015D998}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14D547D9-7C7E-42CC-9A1C-B0877015D998}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14D547D9-7C7E-42CC-9A1C-B0877015D998}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
