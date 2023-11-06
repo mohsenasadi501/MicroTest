@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using MicroTest.Data;
 using MicroTest.Dtos;
 using MicroTest.Models;
+using PlatformService.SyncDataServices.Http;
 
 namespace MicroTest.Controllers
 {
@@ -12,6 +13,17 @@ namespace MicroTest.Controllers
     {
         private readonly IPlatformRepo _platformRepo;
         private readonly IMapper _mapper;
+        private readonly ICommandDataClient _commandDataClient;
+
+        public PlatformsController(
+            IPlatformRepo platformRepo,
+            IMapper mapper,
+            ICommandDataClient commandDataClient)
+        {
+            _platformRepo = platformRepo;
+            _mapper = mapper;
+            _commandDataClient = commandDataClient;
+        }
 
         [HttpGet("enviroment", Name = "GetEnviroments")]
         public ActionResult<string[]> GetEnviroments()
@@ -21,11 +33,6 @@ namespace MicroTest.Controllers
                     Environment.GetEnvironmentVariable("API_SortOrder"),
                     Environment.GetEnvironmentVariable("API_PageSize")
                 };
-        }
-        public PlatformsController(IPlatformRepo platformRepo, IMapper mapper)
-        {
-            _platformRepo = platformRepo;
-            _mapper = mapper;
         }
 
         [HttpGet]
@@ -51,13 +58,22 @@ namespace MicroTest.Controllers
         }
 
         [HttpPost]
-        public ActionResult<PlatformReadDto> CreatePlatform(PlatformCreateDto platformCreateDto)
+        public async Task<ActionResult<PlatformReadDto>> CreatePlatform(PlatformCreateDto platformCreateDto)
         {
             var platfromItem = _mapper.Map<Platform>(platformCreateDto);
             _platformRepo.CreatePlatform(platfromItem);
             _platformRepo.SaveChanges();
 
             var platformReadDto = _mapper.Map<PlatformReadDto>(platfromItem);
+
+            try
+            {
+                await _commandDataClient.SendPlatformToCommand(platformReadDto);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"--> Could not send synchronously:{ex.Message}");
+            }
 
             return CreatedAtRoute(nameof(GetPlatformById), new { Id = platformReadDto.Id }, platformReadDto);
         }

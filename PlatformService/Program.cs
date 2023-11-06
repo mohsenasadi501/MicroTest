@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using MicroTest.Data;
+using PlatformService.SyncDataServices.Http;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,10 +9,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
 builder.Configuration.AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
 
-
 // Add services to the container.
 
 builder.Services.AddScoped<IPlatformRepo, PlatformRepo>();
+builder.Services.AddHttpClient<ICommandDataClient,HttpCommandDataClient>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

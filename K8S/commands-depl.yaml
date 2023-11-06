@@ -2,51 +2,40 @@ apiVersion: apps/v1
 kind: Deployment # We should specify the object or component exp: deployment, service, secret, ...
 # The object that we specified, metadata, provides unique properties of that object. This may contain name, namespace, and label fields. So, through this, we get information about the object. Here is an example.
 metadata:
-  name: platform  # specifies the name of the deployment.
+  name: commands  # specifies the name of the deployment.
   labels:
-    app: platform-app
+    app: commands-app
 spec:
   replicas: 1 # Desired number of replicas (instances) of the API to be running.
   selector:
     matchLabels:
-      app: platform-app
+      app: commands-app
   template: # Defines the configuration for the pods created by the deployment.
     metadata:
       labels: #  Field sets the label for the pods.
-        app: platform-app
-        service: platform
+        app: commands-app
+        service: commands
     spec:
       containers: # Section specifies the container configuration.
-        - name: platformcontainer # Name of the container.
-          image: mohsenasadi5011/platformservice:latest # References the Docker image you built earlier
+        - name: commandscontainer # Name of the container.
+          image: mohsenasadi5011/commandsservice:latest # References the Docker image you built earlier
           imagePullPolicy: IfNotPresent # will use the local docker images if not present the will check docker hub
           ports:
             - containerPort: 80
               protocol: TCP
-          env:
-            - name: API_SortOrder
-              valueFrom:
-               configMapKeyRef:
-                key: "SortOrder"
-                name: "platform-config"
-            - name: API_PageSize
-              valueFrom:
-               configMapKeyRef:
-                key: "PageSize"
-                name: "platform-config"
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: platformservice # Name of the service.
+  name: commandservice # Name of the service.
   labels:
     app: product-app
-    service: platform
+    service: commands
 spec:
   type: NodePort
   ports:
-    - port: 8081 # is the abstracted Service port, which can be any port other pods use to access the Service, In this case it will be accessible from the host 
+    - port: 8080 # is the abstracted Service port, which can be any port other pods use to access the Service, In this case it will be accessible from the host 
       targetPort : 80 # Is the port the container accepts traffic on
       protocol: TCP
   selector: # Field matches the label specified in the deployment YAML.
-    app: platform-app
+    app: commands-app
