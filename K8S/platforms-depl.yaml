@@ -43,10 +43,29 @@ metadata:
     app: product-app
     service: platform
 spec:
-  type: NodePort
   ports:
-    - port: 8081 # is the abstracted Service port, which can be any port other pods use to access the Service, In this case it will be accessible from the host 
+    - port: 80 # is the abstracted Service port, which can be any port other pods use to access the Service, In this case it will be accessible from the host 
       targetPort : 80 # Is the port the container accepts traffic on
       protocol: TCP
   selector: # Field matches the label specified in the deployment YAML.
     app: platform-app
+
+
+
+
+
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: platformservice # Name of the service.
+#   labels:
+#     app: product-app
+#     service: platform
+# spec:
+#   type: NodePort
+#   ports:
+#     - port: 8081 # is the abstracted Service port, which can be any port other pods use to access the Service, In this case it will be accessible from the host 
+#       targetPort : 80 # Is the port the container accepts traffic on
+#       protocol: TCP
+#   selector: # Field matches the label specified in the deployment YAML.
+#     app: platform-app
