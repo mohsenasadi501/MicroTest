@@ -34,7 +34,7 @@ metadata:
 spec:
   type: NodePort
   ports:
-    - port: 8080 # is the abstracted Service port, which can be any port other pods use to access the Service, In this case it will be accessible from the host 
+    - port: 80 # is the abstracted Service port, which can be any port other pods use to access the Service, In this case it will be accessible from the host 
       targetPort : 80 # Is the port the container accepts traffic on
       protocol: TCP
   selector: # Field matches the label specified in the deployment YAML.

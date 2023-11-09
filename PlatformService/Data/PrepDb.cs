@@ -1,4 +1,5 @@
-﻿using MicroTest.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using MicroTest.Models;
 
 namespace MicroTest.Data
 {
@@ -11,6 +12,8 @@ namespace MicroTest.Data
         }
         private static void SeedData(AppDbContext context)
         {
+            context.Database.Migrate();
+
             if (!context.Platforms.Any())
             {
                 Console.WriteLine("--> Seeding data ...");
