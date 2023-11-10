@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MicroTest.Dtos;
 using MicroTest.Models;
+using PlatformService.Dtos;
 
 namespace MicroTest.Profiles
 {
@@ -11,6 +12,7 @@ namespace MicroTest.Profiles
             //Source -> Target
             CreateMap<Platform, PlatformReadDto>();
             CreateMap<PlatformCreateDto, Platform>();
+            CreateMap<PlatformReadDto, PlatformPublishDto>();
         }
     }
 }

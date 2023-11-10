@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using MicroTest.Data;
 using MicroTest.Dtos;
 using MicroTest.Models;
+using PlatformService.AsyncDataServices;
+using PlatformService.Dtos;
 using PlatformService.SyncDataServices.Http;
 
 namespace MicroTest.Controllers
@@ -14,15 +16,18 @@ namespace MicroTest.Controllers
         private readonly IPlatformRepo _platformRepo;
         private readonly IMapper _mapper;
         private readonly ICommandDataClient _commandDataClient;
+        private readonly IMessageBusClient _messageBusClient;
 
         public PlatformsController(
             IPlatformRepo platformRepo,
             IMapper mapper,
-            ICommandDataClient commandDataClient)
+            ICommandDataClient commandDataClient,
+            IMessageBusClient messageBusClient)
         {
             _platformRepo = platformRepo;
             _mapper = mapper;
             _commandDataClient = commandDataClient;
+            _messageBusClient = messageBusClient;
         }
 
         [HttpGet("enviroment", Name = "GetEnviroments")]
@@ -66,6 +71,7 @@ namespace MicroTest.Controllers
 
             var platformReadDto = _mapper.Map<PlatformReadDto>(platfromItem);
 
+            //Send sync Message
             try
             {
                 await _commandDataClient.SendPlatformToCommand(platformReadDto);
@@ -73,6 +79,18 @@ namespace MicroTest.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine($"--> Could not send synchronously:{ex.Message}");
+            }
+
+            //Send Async Message
+            try
+            {
+                var platformPublishedDto = _mapper.Map<PlatformPublishDto>(platformReadDto);
+                platformPublishedDto.Event = "Platform_Published";
+                _messageBusClient.PublishNewPlatform(platformPublishedDto);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"--> Could not send Asynchronously:{ex.Message}");
             }
 
             return CreatedAtRoute(nameof(GetPlatformById), new { Id = platformReadDto.Id }, platformReadDto);

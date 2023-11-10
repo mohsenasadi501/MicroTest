@@ -1,5 +1,6 @@
 ﻿using CommandsService.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace CommandsService.Data
 {
@@ -26,6 +27,11 @@ namespace CommandsService.Data
                 throw new ArgumentNullException(nameof(platform));
 
             _context.Platforms.Add(platform);
+        }
+
+        public bool ExternalPlatformExists(int externalPlatformId)
+        {
+            return _context.Platforms.Any(p => p.ExternalId == externalPlatformId);
         }
 
         public IEnumerable<Platform> GetAllPlatforms()
