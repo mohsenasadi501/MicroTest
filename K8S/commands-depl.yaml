@@ -18,7 +18,7 @@ spec:
     spec:
       containers: # Section specifies the container configuration.
         - name: commandscontainer # Name of the container.
-          image: mohsenasadi5011/commandsservice:latest # References the Docker image you built earlier
+          image: mohsenasadi5011/commandservice:latest # References the Docker image you built earlier
           imagePullPolicy: IfNotPresent # will use the local docker images if not present the will check docker hub
           ports:
             - containerPort: 80
