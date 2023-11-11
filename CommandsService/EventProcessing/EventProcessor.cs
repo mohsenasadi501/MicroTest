@@ -53,11 +53,12 @@ namespace CommandsService.EventProcessing
 
                 try
                 {
-                    var plat = _mapper.Map<Platform>(platformPublishedMessage);
+                    var plat = _mapper.Map<Platform>(platformPublisedDto);
                     if (!repo.ExternalPlatformExists(plat.ExternalId))
                     {
                         repo.CreatePlatform(plat);
                         repo.SaveChnages();
+                        Console.WriteLine("--> Platform Added");
                     }
                     else
                     {
